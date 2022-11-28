@@ -1,1 +1,5 @@
 Ensure the injectors used are in the proper file paths that are in use in Inject-Process. It won't be enough to just clone the repo, the folders will need to be manually configured or the script updated. 
+
+Set $home_folder and $results_folder. $home_folder needs to have sub-folders with a matching injector name. 
+
+Inject-Process needs Analyse-Log to be loaded into memory already to work. It's there to parse out the logs, if you'd rather not do that just comment that section out
