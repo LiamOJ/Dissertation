@@ -1,1 +1,1 @@
-Ensure the injectors used and in the proper file paths that are in use in Inject-Process. It won't be enough to just clone the repo, the folders will need to be manually configured or the script updated. 
+Ensure the injectors used are in the proper file paths that are in use in Inject-Process. It won't be enough to just clone the repo, the folders will need to be manually configured or the script updated. 
