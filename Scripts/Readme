@@ -3,3 +3,5 @@ Ensure the injectors used are in the proper file paths that are in use in Inject
 Set $home_folder and $results_folder. $home_folder needs to have sub-folders with a matching injector name. 
 
 Inject-Process needs Analyse-Log to be loaded into memory already to work. It's there to parse out the logs, if you'd rather not do that just comment that section out
+
+Inject-Process is currently set to just load the Hartong config. If you're wanting to do the full run change the start and end config loads between trace and Hartong
